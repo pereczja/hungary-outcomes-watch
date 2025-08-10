@@ -5,6 +5,7 @@ import { TOP5_METRICS } from '@/data/competitiveness';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import LiveGDPPerCapitaChart from '@/components/LiveGDPPerCapitaChart';
+import LiveDebtToGDPChart from '@/components/LiveDebtToGDPChart';
 
 const Competitiveness = () => {
   return (
@@ -28,13 +29,14 @@ const Competitiveness = () => {
 
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
             <LiveGDPPerCapitaChart />
+            <LiveDebtToGDPChart />
             {TOP5_METRICS.filter(m => m.id !== 'gdp_pc_eur').map(m => (
               <ChartCard key={m.id} metric={m} />
             ))}
           </div>
 
           <div className="mt-8 rounded-lg border p-4 text-sm text-muted-foreground">
-            Note: The series use demo placeholder values for layout. For production, connect to Eurostat/OECD time series and update the dataset. GDP per capita shown above is in EUR denomination.
+            Note: Most charts use demo placeholder values; the GDP per capita and debt/GDP charts fetch live data from Eurostat. Replace others with official series as needed.
           </div>
         </section>
       </main>
