@@ -1,0 +1,25 @@
+import SEO from '@/components/SEO';
+import SiteHeader from '@/components/SiteHeader';
+import { OutcomeTracker } from '@/components/OutcomeTracker';
+
+const OutcomesPage = () => {
+  return (
+    <>
+      <SEO
+        title="Hungary Outcomes Tracker | BuildHungary"
+        description="Track key outcomes across 15 years of NER: infrastructure, economy, education, healthcare, governance."
+        canonical={typeof window !== 'undefined' ? window.location.origin + '/outcomes' : undefined}
+      />
+      <SiteHeader />
+      <main>
+        <section className="container mx-auto px-4 py-8">
+          <h1 className="mb-2 text-3xl font-bold">Hungary Outcomes Tracker</h1>
+          <p className="mb-6 text-muted-foreground">A clear overview of major outcomes and their current status.</p>
+        </section>
+        <OutcomeTracker />
+      </main>
+    </>
+  );
+};
+
+export default OutcomesPage;
