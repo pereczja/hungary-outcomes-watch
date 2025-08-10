@@ -1,9 +1,10 @@
 import SEO from '@/components/SEO';
 import SiteHeader from '@/components/SiteHeader';
 import ChartCard from '@/components/ChartCard';
-import { TOP5_METRICS, gdpPerCapitaEUR } from '@/data/competitiveness';
+import { TOP5_METRICS } from '@/data/competitiveness';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import LiveGDPPerCapitaChart from '@/components/LiveGDPPerCapitaChart';
 
 const Competitiveness = () => {
   return (
@@ -26,7 +27,8 @@ const Competitiveness = () => {
           </div>
 
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-            {TOP5_METRICS.map(m => (
+            <LiveGDPPerCapitaChart />
+            {TOP5_METRICS.filter(m => m.id !== 'gdp_pc_eur').map(m => (
               <ChartCard key={m.id} metric={m} />
             ))}
           </div>
