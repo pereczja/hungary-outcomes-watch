@@ -31,8 +31,11 @@ const SiteHeader = () => {
           <Button asChild variant="outline" size="sm">
             <Link to="/outcomes">Explore</Link>
           </Button>
+          <Button asChild variant="outline" size="sm">
+            <Link to="/outcomes/competitiveness">Insights</Link>
+          </Button>
           <Button asChild variant="hero" size="sm">
-            <Link to="/promises">Compare</Link>
+            <Link to="/play/snake">Play</Link>
           </Button>
         </div>
       </div>
