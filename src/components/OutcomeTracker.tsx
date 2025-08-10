@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { ExternalLink } from 'lucide-react';
 
 const statusLabel: Record<OutcomeStatus, string> = {
   'achieved': 'Achieved',
@@ -89,6 +90,34 @@ export const OutcomeTracker = () => {
                     <span className="text-muted-foreground">{o.metric}</span>
                     <span className="text-muted-foreground">Updated {new Date(o.lastUpdated).toLocaleDateString()}</span>
                   </div>
+
+                  {o.evidence && o.evidence.length > 0 && (
+                    <div className="mt-3 space-y-2">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-xs font-medium text-muted-foreground">Evidence:</span>
+                        {o.evidence.map((ev) => (
+                          <Badge key={ev.url} variant="outline" className="px-2 py-1">
+                            <a
+                              href={ev.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1"
+                              aria-label={`Open evidence: ${ev.label}`}
+                            >
+                              <ExternalLink className="h-3.5 w-3.5" />
+                              <span className="text-xs">{ev.label}</span>
+                            </a>
+                          </Badge>
+                        ))}
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        Verified: {new Date(Math.max(
+                          ...o.evidence.map((ev) => new Date(ev.verifiedAt).getTime())
+                        )).toLocaleDateString()}
+                      </div>
+                    </div>
+                  )}
+
                 </CardContent>
               </Card>
             ))}
