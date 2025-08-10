@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { ExternalLink } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const statusLabel: Record<OutcomeStatus, string> = {
   'achieved': 'Achieved',
@@ -23,6 +24,9 @@ const statusClass: Record<OutcomeStatus, string> = {
 export const OutcomeTracker = () => {
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState<'all' | OutcomeStatus>('all');
+  const [category, setCategory] = useState<'All' | string>('All');
+
+  const categories = useMemo(() => Array.from(new Set(data.map(o => o.category))).sort(), []);
 
   const filtered = useMemo(() => {
     return data.filter((o) => {
@@ -31,9 +35,10 @@ export const OutcomeTracker = () => {
         o.category.toLowerCase().includes(query.toLowerCase())
       );
       const matchesStatus = status === 'all' ? true : o.status === status;
-      return matchesQuery && matchesStatus;
+      const matchesCategory = category === 'All' ? true : o.category === category;
+      return matchesQuery && matchesStatus && matchesCategory;
     });
-  }, [query, status]);
+  }, [query, status, category]);
 
   const counts = useMemo(() => {
     const base: Record<'all' | OutcomeStatus, number> = {
@@ -64,6 +69,28 @@ export const OutcomeTracker = () => {
         </div>
       </div>
 
+      <div className="mb-4 flex flex-wrap gap-2">
+        <Button
+          size="sm"
+          variant={category === 'All' ? 'default' : 'outline'}
+          className="rounded-full"
+          onClick={() => setCategory('All')}
+        >
+          All topics
+        </Button>
+        {categories.map((c) => (
+          <Button
+            key={c}
+            size="sm"
+            variant={category === c ? 'default' : 'outline'}
+            className="rounded-full"
+            onClick={() => setCategory(c)}
+          >
+            {c}
+          </Button>
+        ))}
+      </div>
+
       <Tabs value={status} onValueChange={(v) => setStatus(v as any)}>
         <TabsList className="flex w-full flex-wrap gap-2">
           {(['all','achieved','in-progress','stalled','not-achieved'] as const).map((key) => (
@@ -75,7 +102,7 @@ export const OutcomeTracker = () => {
         <TabsContent value={status} className="mt-6">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {filtered.map((o) => (
-              <Card key={o.id} className="transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-lg">
+              <Card key={o.id} className="transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-lg motion-safe:animate-enter">
                 <CardHeader>
                   <div className="flex items-start justify-between gap-2">
                     <div>
@@ -101,7 +128,7 @@ export const OutcomeTracker = () => {
                               href={ev.url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1"
+                              className="story-link inline-flex items-center gap-1"
                               aria-label={`Open evidence: ${ev.label}`}
                             >
                               <ExternalLink className="h-3.5 w-3.5" />
