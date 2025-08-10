@@ -22,6 +22,9 @@ const SiteHeader = () => {
           <NavLink to="/promises" className={navLinkClass}>
             Promise Tracker
           </NavLink>
+          <NavLink to="/outcomes/competitiveness" className={navLinkClass}>
+            Competitiveness
+          </NavLink>
         </nav>
 
         <div className="flex items-center gap-2">
