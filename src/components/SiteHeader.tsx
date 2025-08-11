@@ -20,13 +20,13 @@ const SiteHeader = () => {
             Outcomes
           </NavLink>
           <NavLink to="/promises" className={navLinkClass}>
-            Promise Tracker
+            2026 Promise tracker
           </NavLink>
           <NavLink to="/outcomes/competitiveness" className={navLinkClass}>
             Competitiveness
           </NavLink>
           <NavLink to="/promises/ov-2022" className={navLinkClass}>
-            OV 2022+
+            Actual government
           </NavLink>
         </nav>
 
@@ -38,7 +38,7 @@ const SiteHeader = () => {
             <Link to="/outcomes/competitiveness">Insights</Link>
           </Button>
           <Button asChild variant="outline" size="sm">
-            <Link to="/promises/ov-2022">OV 2022+</Link>
+            <Link to="/promises/ov-2022">Actual government</Link>
           </Button>
           <Button asChild variant="hero" size="sm">
             <Link to="/play/snake">Play</Link>

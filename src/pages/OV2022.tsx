@@ -51,14 +51,14 @@ const OV2022Page = () => {
   return (
     <>
       <SEO
-        title="OV 2022 utáni ígéretek és döntések | BuildHungary"
+        title="Actual government | BuildHungary"
         description="OV: 2022 utáni nagyobb ígéretek, befagyasztások és folytatjuk-tételek – programbeszédek és kormányzati oldalak alapján."
         canonical={typeof window !== 'undefined' ? window.location.origin + '/promises/ov-2022' : undefined}
       />
       <SiteHeader />
       <main>
         <section className="container mx-auto px-4 py-8">
-          <h1 className="mb-2 text-3xl font-bold">OV: 2022 utáni nagyobb ígéretek/befagyasztások/„folytatjuk”</h1>
+          <h1 className="mb-2 text-3xl font-bold">Actual government</h1>
           <p className="mb-6 max-w-3xl text-muted-foreground">Aktuális kormányzati ciklus – programbeszédek és kormányzati oldalak alapján összegyűjtve. A tételek nem teljes körűek és folyamatosan bővülnek.</p>
 
           <div className="mb-6 flex flex-wrap gap-3">
