@@ -9,6 +9,7 @@ import OutcomesPage from "./pages/Outcomes";
 import PromisesPage from "./pages/Promises";
 import Competitiveness from "./pages/Competitiveness";
 import SnakePage from "./pages/Snake";
+import OV2022Page from "./pages/OV2022";
 
 const queryClient = new QueryClient();
 
@@ -22,6 +23,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/outcomes" element={<OutcomesPage />} />
           <Route path="/promises" element={<PromisesPage />} />
+          <Route path="/promises/ov-2022" element={<OV2022Page />} />
           <Route path="/outcomes/competitiveness" element={<Competitiveness />} />
           <Route path="/play/snake" element={<SnakePage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

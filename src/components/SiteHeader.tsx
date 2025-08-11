@@ -25,6 +25,9 @@ const SiteHeader = () => {
           <NavLink to="/outcomes/competitiveness" className={navLinkClass}>
             Competitiveness
           </NavLink>
+          <NavLink to="/promises/ov-2022" className={navLinkClass}>
+            OV 2022+
+          </NavLink>
         </nav>
 
         <div className="flex items-center gap-2">
@@ -33,6 +36,9 @@ const SiteHeader = () => {
           </Button>
           <Button asChild variant="outline" size="sm">
             <Link to="/outcomes/competitiveness">Insights</Link>
+          </Button>
+          <Button asChild variant="outline" size="sm">
+            <Link to="/promises/ov-2022">OV 2022+</Link>
           </Button>
           <Button asChild variant="hero" size="sm">
             <Link to="/play/snake">Play</Link>
