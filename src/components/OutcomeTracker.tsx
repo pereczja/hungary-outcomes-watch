@@ -1,153 +1,162 @@
 import { useMemo, useState } from 'react';
-import { outcomes as data, type Outcome, type OutcomeStatus } from '@/data/outcomes';
+import { INITIATIVES, PROMISES, type Initiative, type InitiativeStatus, type PromiseItem, type PromiseStatus } from '@/data/nerOutcomes';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { ExternalLink } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
-const statusLabel: Record<OutcomeStatus, string> = {
-  'achieved': 'Achieved',
-  'in-progress': 'In Progress',
-  'stalled': 'Stalled',
-  'not-achieved': 'Not Achieved',
+const initiativeStatusLabel: Record<InitiativeStatus, string> = {
+  success: 'Sikeres',
+  mixed: 'Vegyes',
+  lagging: 'Lemarad',
 };
 
-const statusClass: Record<OutcomeStatus, string> = {
-  'achieved': 'bg-success text-success-foreground',
-  'in-progress': 'bg-info text-info-foreground',
-  'stalled': 'bg-warning text-warning-foreground',
-  'not-achieved': 'bg-destructive text-destructive-foreground',
+const initiativeStatusClass: Record<InitiativeStatus, string> = {
+  success: 'bg-success text-success-foreground',
+  mixed: 'bg-info text-info-foreground',
+  lagging: 'bg-destructive text-destructive-foreground',
+};
+
+const promiseStatusLabel: Record<PromiseStatus, string> = {
+  fulfilled: 'Teljesítve',
+  in_progress: 'Folyamatban',
+  stalled: 'Csúszik',
+  unknown: 'Nincs információ',
+};
+
+const promiseStatusClass: Record<PromiseStatus, string> = {
+  fulfilled: 'bg-success text-success-foreground',
+  in_progress: 'bg-info text-info-foreground',
+  stalled: 'bg-warning text-warning-foreground',
+  unknown: 'bg-muted text-foreground',
 };
 
 export const OutcomeTracker = () => {
   const [query, setQuery] = useState('');
-  const [status, setStatus] = useState<'all' | OutcomeStatus>('all');
-  const [category, setCategory] = useState<'All' | string>('All');
+  const [tab, setTab] = useState<'initiatives' | 'promises'>('initiatives');
 
-  const categories = useMemo(() => Array.from(new Set(data.map(o => o.category))).sort(), []);
+  const filteredInitiatives = useMemo(() => {
+    const q = query.toLowerCase();
+    return INITIATIVES.filter((i) =>
+      i.title.toLowerCase().includes(q) ||
+      i.goal.toLowerCase().includes(q) ||
+      i.actions.toLowerCase().includes(q) ||
+      i.assessment.toLowerCase().includes(q) ||
+      i.tags.some(t => t.toLowerCase().includes(q))
+    );
+  }, [query]);
 
-  const filtered = useMemo(() => {
-    return data.filter((o) => {
-      const matchesQuery = !query || (
-        o.title.toLowerCase().includes(query.toLowerCase()) ||
-        o.category.toLowerCase().includes(query.toLowerCase())
-      );
-      const matchesStatus = status === 'all' ? true : o.status === status;
-      const matchesCategory = category === 'All' ? true : o.category === category;
-      return matchesQuery && matchesStatus && matchesCategory;
-    });
-  }, [query, status, category]);
-
-  const counts = useMemo(() => {
-    const base: Record<'all' | OutcomeStatus, number> = {
-      all: data.length,
-      'achieved': 0,
-      'in-progress': 0,
-      'stalled': 0,
-      'not-achieved': 0,
-    };
-    for (const o of data) base[o.status]++;
-    return base;
-  }, []);
+  const filteredPromises = useMemo(() => {
+    const q = query.toLowerCase();
+    return PROMISES.filter((p) =>
+      p.title.toLowerCase().includes(q) ||
+      p.category.toLowerCase().includes(q) ||
+      p.actor.toLowerCase().includes(q) ||
+      (p.deadline?.toLowerCase().includes(q) ?? false)
+    );
+  }, [query]);
 
   return (
     <section className="container mx-auto px-4 py-8">
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-2xl font-semibold">Key Outcomes — NER's 15 Years</h2>
-          <p className="text-sm text-muted-foreground">Explore outcomes across infrastructure, economy, education, health, and governance.</p>
+          <h2 className="text-2xl font-semibold">NER Outcomes – Top 12 és ígéretek</h2>
+          <p className="text-sm text-muted-foreground">Áttekintés a fő kezdeményezésekről és 2022+ ígéretekről.</p>
         </div>
         <div className="flex gap-2">
           <Input
-            placeholder="Search outcomes or categories"
+            placeholder="Keresés: cím, cél, kategória, címke, határidő"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-64"
+            className="w-72"
           />
         </div>
       </div>
 
-      <div className="mb-4 flex flex-wrap gap-2">
-        <Button
-          size="sm"
-          variant={category === 'All' ? 'default' : 'outline'}
-          className="rounded-full"
-          onClick={() => setCategory('All')}
-        >
-          All topics
-        </Button>
-        {categories.map((c) => (
-          <Button
-            key={c}
-            size="sm"
-            variant={category === c ? 'default' : 'outline'}
-            className="rounded-full"
-            onClick={() => setCategory(c)}
-          >
-            {c}
-          </Button>
-        ))}
-      </div>
-
-      <Tabs value={status} onValueChange={(v) => setStatus(v as any)}>
+      <Tabs value={tab} onValueChange={(v) => setTab(v as any)}>
         <TabsList className="flex w-full flex-wrap gap-2">
-          {(['all','achieved','in-progress','stalled','not-achieved'] as const).map((key) => (
-            <TabsTrigger key={key} value={key} className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-              {key === 'all' ? 'All' : statusLabel[key as OutcomeStatus]} ({counts[key as 'all' | OutcomeStatus]})
-            </TabsTrigger>
-          ))}
+          <TabsTrigger value="initiatives" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Top 12 kezdeményezés</TabsTrigger>
+          <TabsTrigger value="promises" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Ígéretek (OV 2022+)</TabsTrigger>
         </TabsList>
-        <TabsContent value={status} className="mt-6">
+
+        <TabsContent value="initiatives" className="mt-6">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {filtered.map((o) => (
-              <Card key={o.id} className="transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-lg motion-safe:animate-enter">
+            {filteredInitiatives.map((i) => (
+              <Card key={i.id} className="transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-lg motion-safe:animate-enter">
                 <CardHeader>
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <CardTitle className="text-base">{o.title}</CardTitle>
-                      <CardDescription>{o.category}</CardDescription>
+                      <CardTitle className="text-base">{i.title}</CardTitle>
+                      <CardDescription className="text-xs">{i.tags.join(' • ')}</CardDescription>
                     </div>
-                    <Badge className={statusClass[o.status]}>{statusLabel[o.status]}</Badge>
+                    <Badge className={initiativeStatusClass[i.status]}>{initiativeStatusLabel[i.status]}</Badge>
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">{o.metric}</span>
-                    <span className="text-muted-foreground">Updated {new Date(o.lastUpdated).toLocaleDateString()}</span>
+                  <div className="mb-3">
+                    <div className="mb-1 flex items-center justify-between text-xs text-muted-foreground">
+                      <span>Sikerpont</span>
+                      <span>{i.successScore}%</span>
+                    </div>
+                    <Progress value={i.successScore} aria-label={`Sikerpont ${i.successScore}%`} />
                   </div>
+                  <div className="space-y-2">
+                    <p className="text-sm"><span className="font-medium">Cél:</span> {i.goal}</p>
+                    <p className="text-sm"><span className="font-medium">Eszközök:</span> {i.actions}</p>
+                    <p className="text-xs text-muted-foreground"><span className="font-medium">Értékelés:</span> {i.assessment}</p>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </TabsContent>
 
-                  {o.evidence && o.evidence.length > 0 && (
-                    <div className="mt-3 space-y-2">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="text-xs font-medium text-muted-foreground">Evidence:</span>
-                        {o.evidence.map((ev) => (
-                          <Badge key={ev.url} variant="outline" className="px-2 py-1">
-                            <a
-                              href={ev.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="story-link inline-flex items-center gap-1"
-                              aria-label={`Open evidence: ${ev.label}`}
-                            >
+        <TabsContent value="promises" className="mt-6">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[6%]">Szereplő</TableHead>
+                  <TableHead className="w-[34%]">Ígéret</TableHead>
+                  <TableHead className="w-[10%]">Dátum</TableHead>
+                  <TableHead className="w-[14%]">Kategória</TableHead>
+                  <TableHead className="w-[10%]">Konkrétság</TableHead>
+                  <TableHead className="w-[10%]">Határidő</TableHead>
+                  <TableHead className="w-[10%]">Státusz</TableHead>
+                  <TableHead className="w-[6%]"/>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredPromises.map((p) => (
+                  <TableRow key={p.id}>
+                    <TableCell><Badge variant="outline">{p.actor}</Badge></TableCell>
+                    <TableCell>
+                      <div className="font-medium">{p.title}</div>
+                    </TableCell>
+                    <TableCell className="text-xs text-muted-foreground">{new Date(p.date).toLocaleDateString()}</TableCell>
+                    <TableCell className="text-xs">{p.category}</TableCell>
+                    <TableCell className="text-xs">{p.specificity}/5</TableCell>
+                    <TableCell className="text-xs">{p.deadline ? new Date(p.deadline).toLocaleDateString() : '—'}</TableCell>
+                    <TableCell><Badge className={promiseStatusClass[p.status]}>{promiseStatusLabel[p.status]}</Badge></TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex flex-wrap justify-end gap-1">
+                        {p.sources.map((s) => (
+                          <Badge key={s.url} variant="outline" className="px-2 py-1">
+                            <a href={s.url} target="_blank" rel="noopener noreferrer" className="story-link inline-flex items-center gap-1" aria-label={`Forrás megnyitása: ${s.label}`}>
                               <ExternalLink className="h-3.5 w-3.5" />
-                              <span className="text-xs">{ev.label}</span>
+                              <span className="text-[10px]">{s.label}</span>
                             </a>
                           </Badge>
                         ))}
                       </div>
-                      <div className="text-xs text-muted-foreground">
-                        Verified: {new Date(Math.max(
-                          ...o.evidence.map((ev) => new Date(ev.verifiedAt).getTime())
-                        )).toLocaleDateString()}
-                      </div>
-                    </div>
-                  )}
-
-                </CardContent>
-              </Card>
-            ))}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </div>
         </TabsContent>
       </Tabs>
