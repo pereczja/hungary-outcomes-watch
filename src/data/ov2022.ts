@@ -1,5 +1,5 @@
 export type OVItemType = 'ígéret' | 'befagyasztás' | 'folytatjuk';
-export type OVItemStatus = 'folyamatban' | 'teljesítve' | 'nincs-információ';
+export type OVItemStatus = 'folyamatban' | 'teljesítve' | 'nincs-információ' | 'csúszik' | 'nem-teljesült';
 
 export interface OVItem {
   id: string;
@@ -10,6 +10,7 @@ export interface OVItem {
   forrasCim: string;
   forrasUrl: string;
   status: OVItemStatus;
+  megjegyzes?: string;
 }
 
 export const ov2022Items: OVItem[] = [

@@ -12,6 +12,8 @@ const statusClass: Record<OVItemStatus, string> = {
   'folyamatban': 'bg-info text-info-foreground',
   'teljesítve': 'bg-success text-success-foreground',
   'nincs-információ': 'bg-muted text-foreground',
+  'csúszik': 'bg-warning text-warning-foreground',
+  'nem-teljesült': 'bg-destructive text-destructive-foreground',
 };
 
 const tipusClass: Record<OVItemType, string> = {
@@ -22,14 +24,29 @@ const tipusClass: Record<OVItemType, string> = {
 
 const OV2022Page = () => {
   const [query, setQuery] = useState('');
+  const patched = useMemo(() => {
+    return ov2022Items.map((i) => {
+      switch (i.id) {
+        case 'ov-12':
+          return { ...i, status: 'csúszik', megjegyzes: 'Többszöri halasztás; kommunikált mérföldkövek mellett termelés még nem indult.' } as OVItem;
+        case 'ov-7':
+          return { ...i, status: 'csúszik', megjegyzes: 'Céldátumok módosultak; 2025-ös kommunikáció a fordulat évéről.' } as OVItem;
+        case 'ov-2':
+          return { ...i, megjegyzes: 'Cél: egyszámjegy 2023 végére; 2023 Q4-ben egyszámjegy, később változó pálya.' } as OVItem;
+        default:
+          return i;
+      }
+    });
+  }, []);
   const rows = useMemo(() => {
     const q = query.toLowerCase();
-    return ov2022Items.filter((i) =>
+    return patched.filter((i) =>
       i.tema.toLowerCase().includes(q) ||
       i.tetel.toLowerCase().includes(q) ||
-      i.tipus.toLowerCase().includes(q)
+      i.tipus.toLowerCase().includes(q) ||
+      (i.megjegyzes?.toLowerCase().includes(q) ?? false)
     );
-  }, [query]);
+  }, [query, patched]);
 
   return (
     <>
@@ -50,7 +67,7 @@ const OV2022Page = () => {
 
           <div className="mb-4 flex items-center justify-between gap-3">
             <Input
-              placeholder="Keresés: téma, tétel, típus"
+              placeholder="Keresés: téma, tétel, típus, megjegyzés"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               className="w-80"
@@ -63,9 +80,10 @@ const OV2022Page = () => {
                 <TableRow>
                   <TableHead className="w-[12%]">Típus</TableHead>
                   <TableHead className="w-[18%]">Téma</TableHead>
-                  <TableHead className="w-[40%]">Tétel</TableHead>
-                  <TableHead className="w-[12%]">Dátum</TableHead>
+                  <TableHead className="w-[34%]">Tétel</TableHead>
+                  <TableHead className="w-[10%]">Dátum</TableHead>
                   <TableHead className="w-[10%]">Státusz</TableHead>
+                  <TableHead className="w-[16%]">Megjegyzés</TableHead>
                   <TableHead className="w-[8%] text-right">Forrás</TableHead>
                 </TableRow>
               </TableHeader>
@@ -81,6 +99,7 @@ const OV2022Page = () => {
                     <TableCell>
                       <Badge className={statusClass[r.status]}>{r.status}</Badge>
                     </TableCell>
+                    <TableCell className="text-xs text-muted-foreground">{r.megjegyzes ?? '—'}</TableCell>
                     <TableCell className="text-right">
                       <a className="story-link text-xs" href={r.forrasUrl} target="_blank" rel="noreferrer">{r.forrasCim}</a>
                     </TableCell>
