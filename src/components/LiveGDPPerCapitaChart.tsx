@@ -19,19 +19,26 @@ export const LiveGDPPerCapitaChart = () => {
         const res = await fetch(EUROSTAT_URL);
         if (!res.ok) throw new Error(`Eurostat request failed: ${res.status}`);
         const json = await res.json(); // JSON-stat 2.0
-        const value: (number | null)[] = json?.value ?? json?.dataset?.value;
-        const dim = json?.dimension ?? json?.dataset?.dimension;
-        if (!value || !dim?.id || !Array.isArray(dim.id)) throw new Error('Unexpected Eurostat format');
 
-        const ids: string[] = dim.id;
-        const sizes: number[] = dim.size;
+        // Support JSON-stat v2 where id/size are at root and value may be an object
+        const dim = json?.dimension ?? json?.dataset?.dimension;
+        const ids: string[] = (json?.id ?? json?.dataset?.id ?? dim?.id) as string[];
+        const sizes: number[] = (json?.size ?? json?.dataset?.size ?? dim?.size) as number[];
+        const valueRaw: any = json?.value ?? json?.dataset?.value;
+
+        if (!valueRaw || !ids || !Array.isArray(ids) || !sizes || !Array.isArray(sizes) || !dim) {
+          throw new Error('Unexpected Eurostat format');
+        }
+
         const n = ids.length;
         const byPos: Record<string, string[]> = {};
         ids.forEach((d) => {
-          const cat = dim[d]?.category?.index ?? {};
+          const cat = (dim as any)[d]?.category?.index ?? {};
           const arr: string[] = [];
           // Build array where index is position -> code
-          Object.entries(cat).forEach(([code, pos]: any) => { arr[Number(pos)] = code; });
+          Object.entries(cat).forEach(([code, pos]: any) => {
+            arr[Number(pos)] = code as string;
+          });
           byPos[d] = arr;
         });
 
@@ -48,7 +55,7 @@ export const LiveGDPPerCapitaChart = () => {
 
         const dataMap = new Map<number, SeriesPoint>();
 
-        value.forEach((v, k) => {
+        const processObs = (v: number | null, k: number) => {
           if (v == null) return;
           // decode coordinates
           const coords: number[] = new Array(n);
@@ -65,18 +72,30 @@ export const LiveGDPPerCapitaChart = () => {
 
           if (unitCode !== 'CP_EUR_HAB' || itemCode !== 'B1GQ') return;
           const year = Number(timeCode);
-          if (year < 2010 || year > 2024) return;
+          if (Number.isNaN(year) || year < 2010 || year > 2024) return;
           let row = dataMap.get(year) ?? { year };
           const mapCountry: Record<string, keyof SeriesPoint> = {
-            HU: 'Hungary', PL: 'Poland', SK: 'Slovakia', RO: 'Romania'
+            HU: 'Hungary', PL: 'Poland', SK: 'Slovakia', RO: 'Romania',
           };
           const key = mapCountry[geoCode as keyof typeof mapCountry];
           if (key) (row as any)[key] = Number(v);
           dataMap.set(year, row);
-        });
+        };
+
+        if (Array.isArray(valueRaw)) {
+          (valueRaw as (number | null)[]).forEach((v, k) => processObs(v, k));
+        } else if (typeof valueRaw === 'object') {
+          Object.entries(valueRaw as Record<string, number | null>).forEach(([kStr, v]) => {
+            const k = Number(kStr);
+            if (!Number.isNaN(k)) processObs(v as number | null, k);
+          });
+        } else {
+          throw new Error('Unexpected Eurostat format');
+        }
 
         const list = Array.from(dataMap.values()).sort((a, b) => a.year - b.year);
         if (mounted) setRows(list);
+
       } catch (e: any) {
         console.error(e);
         if (mounted) setError(e?.message || 'Failed to load Eurostat data');
