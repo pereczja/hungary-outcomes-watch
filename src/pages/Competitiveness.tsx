@@ -1,11 +1,14 @@
 import SEO from '@/components/SEO';
 import SiteHeader from '@/components/SiteHeader';
-import ChartCard from '@/components/ChartCard';
-import { TOP5_METRICS } from '@/data/competitiveness';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import LiveGDPPerCapitaChart from '@/components/LiveGDPPerCapitaChart';
 import LiveDebtToGDPChart from '@/components/LiveDebtToGDPChart';
+import LiveEmploymentRateChart from '@/components/LiveEmploymentRateChart';
+import LiveBirthRateChart from '@/components/LiveBirthRateChart';
+import LiveRnDChart from '@/components/LiveRnDChart';
+import LiveExportsChart from '@/components/LiveExportsChart';
+import LiveLifeExpectancyChart from '@/components/LiveLifeExpectancyChart';
 
 const Competitiveness = () => {
   return (
@@ -30,13 +33,15 @@ const Competitiveness = () => {
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
             <LiveGDPPerCapitaChart />
             <LiveDebtToGDPChart />
-            {TOP5_METRICS.filter(m => m.id !== 'gdp_pc_eur').map(m => (
-              <ChartCard key={m.id} metric={m} />
-            ))}
+            <LiveEmploymentRateChart />
+            <LiveBirthRateChart />
+            <LiveRnDChart />
+            <LiveExportsChart />
+            <LiveLifeExpectancyChart />
           </div>
 
           <div className="mt-8 rounded-lg border p-4 text-sm text-muted-foreground">
-            Note: Most charts use demo placeholder values; the GDP per capita and debt/GDP charts fetch live data from Eurostat. Replace others with official series as needed.
+            Note: All charts display live data from Eurostat APIs. Data is fetched in real-time and may not be available for the most recent periods due to reporting delays.
           </div>
         </section>
       </main>
