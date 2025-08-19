@@ -1,119 +1,180 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { Line, LineChart, XAxis, YAxis, CartesianGrid } from 'recharts';
+import { useEffect, useState, useMemo } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { ChartContainer, ChartTooltip, ChartLegend } from '@/components/ui/chart';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
 
-interface SeriesPoint { year: number; Hungary?: number; Poland?: number; Slovakia?: number; Romania?: number }
+interface SeriesPoint {
+  year: number;
+  Hungary?: number;
+  Poland?: number;
+  Slovakia?: number;
+  Romania?: number;
+}
 
-const EUROSTAT_URL =
-  'https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/gov_10dd_edpt1?format=JSON&sinceTimePeriod=2010&untilTimePeriod=2024&geo=HU&geo=PL&geo=SK&geo=RO&unit=PC_GDP&sector=S13';
-
-export const LiveDebtToGDPChart = () => {
-  const [rows, setRows] = useState<SeriesPoint[] | null>(null);
-  const [error, setError] = useState<string | null>(null);
+const LiveDebtToGDPChart = () => {
+  const [rows, setRows] = useState<SeriesPoint[]>([]);
+  const [error, setError] = useState<string>('');
 
   useEffect(() => {
-    let mounted = true;
-    (async () => {
+    const fetchData = async () => {
       try {
-        const res = await fetch(EUROSTAT_URL);
-        if (!res.ok) throw new Error(`Eurostat request failed: ${res.status}`);
-        const json = await res.json(); // JSON-stat 2.0
-        const value: (number | null)[] = json?.value ?? json?.dataset?.value;
-        const dim = json?.dimension ?? json?.dataset?.dimension;
-        if (!value || !dim?.id || !Array.isArray(dim.id)) throw new Error('Unexpected Eurostat format');
+        const response = await fetch(
+          'https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/gov_10dd_edpt1?format=JSON&sinceTimePeriod=2010&untilTimePeriod=2024&geo=HU&geo=PL&geo=SK&geo=RO&unit=PC_GDP&sector=S13&na_item=GD'
+        );
+        const data = await response.json();
 
-        const ids: string[] = dim.id;
-        const sizes: number[] = dim.size;
-        const n = ids.length;
-        const byPos: Record<string, string[]> = {};
-        ids.forEach((d) => {
-          const cat = dim[d]?.category?.index ?? {};
-          const arr: string[] = [];
-          Object.entries(cat).forEach(([code, pos]: any) => { arr[Number(pos)] = code; });
-          byPos[d] = arr;
-        });
+        // Handle the complex JSON-stat format from Eurostat
+        const values = data.value;
+        const dimensions = data.dimension;
+        
+        // Get dimension indices
+        const geoIndex = dimensions.geo.category.index;
+        const timeIndex = dimensions.time.category.index;
+        const naItemIndex = dimensions.na_item?.category?.index;
 
-        const strides: number[] = new Array(n).fill(1);
-        for (let i = n - 2; i >= 0; i--) strides[i] = strides[i + 1] * sizes[i + 1];
+        // Calculate strides for multi-dimensional data
+        const sizes = data.size;
+        const geoSize = sizes[dimensions.id.indexOf('geo')];
+        const timeSize = sizes[dimensions.id.indexOf('time')];
+        const naSize = naItemIndex ? sizes[dimensions.id.indexOf('na_item')] : 1;
 
-        const idxTime = ids.indexOf('time');
-        const idxGeo = ids.indexOf('geo');
-        const idxUnit = ids.indexOf('unit');
-        const idxSector = ids.indexOf('sector');
+        const processedRows: SeriesPoint[] = [];
+        
+        // Create map to store data by year
+        const yearMap = new Map<number, SeriesPoint>();
 
-        const dataMap = new Map<number, SeriesPoint>();
+        // Iterate through all data points
+        Object.keys(values).forEach(index => {
+          const value = values[index];
+          if (value === null || value === undefined) return;
 
-        value.forEach((v, k) => {
-          if (v == null) return;
-          const coords: number[] = new Array(n);
-          let rem = k;
-          for (let i = 0; i < n; i++) {
-            const stride = strides[i] ?? 1;
-            coords[i] = Math.floor(rem / stride) % sizes[i];
-            rem = rem % stride;
-          }
-          const timeCode = byPos[ids[idxTime]]?.[coords[idxTime]];
-          const geoCode = byPos[ids[idxGeo]]?.[coords[idxGeo]];
-          const unitCode = idxUnit >= 0 ? byPos[ids[idxUnit]]?.[coords[idxUnit]] : undefined;
-          const sectorCode = idxSector >= 0 ? byPos[ids[idxSector]]?.[coords[idxSector]] : undefined;
-
-          if (unitCode && unitCode !== 'PC_GDP') return;
-          if (sectorCode && sectorCode !== 'S13') return;
-
-          const year = Number(timeCode);
+          const idx = parseInt(index);
+          
+          // Calculate coordinates in multi-dimensional array
+          const timeIdx = idx % timeSize;
+          const geoIdx = Math.floor(idx / timeSize) % geoSize;
+          
+          // Get actual values
+          const year = parseInt(Object.keys(timeIndex)[timeIdx]);
+          const geoCode = Object.keys(geoIndex)[geoIdx];
+          
           if (year < 2010 || year > 2024) return;
-          let row = dataMap.get(year) ?? { year };
-          const mapCountry: Record<string, keyof SeriesPoint> = {
-            HU: 'Hungary', PL: 'Poland', SK: 'Slovakia', RO: 'Romania'
-          };
-          const key = mapCountry[geoCode as keyof typeof mapCountry];
-          if (key && (row as any)[key] == null) (row as any)[key] = Number(v);
-          dataMap.set(year, row);
+          
+          const countryName = geoCode === 'HU' ? 'Hungary' :
+                             geoCode === 'PL' ? 'Poland' :
+                             geoCode === 'SK' ? 'Slovakia' :
+                             geoCode === 'RO' ? 'Romania' : null;
+          
+          if (!countryName) return;
+          
+          // Get or create year entry
+          let yearData = yearMap.get(year);
+          if (!yearData) {
+            yearData = { year };
+            yearMap.set(year, yearData);
+          }
+          
+          // Set country value
+          (yearData as any)[countryName] = parseFloat(value);
         });
 
-        const list = Array.from(dataMap.values()).sort((a, b) => a.year - b.year);
-        if (mounted) setRows(list);
-      } catch (e: any) {
-        console.error(e);
-        if (mounted) setError(e?.message || 'Failed to load Eurostat data');
+        // Convert map to sorted array
+        const sortedData = Array.from(yearMap.values()).sort((a, b) => a.year - b.year);
+        setRows(sortedData);
+        
+      } catch (err) {
+        console.error('Error fetching debt data:', err);
+        setError('Failed to load government debt data');
       }
-    })();
-    return () => { mounted = false };
+    };
+
+    fetchData();
   }, []);
 
   const config = useMemo(() => ({
-    Hungary: { label: 'Hungary', color: 'hsl(var(--primary))' },
-    Poland: { label: 'Poland', color: 'hsl(210 90% 45%)' },
-    Slovakia: { label: 'Slovakia', color: 'hsl(45 90% 45%)' },
-    Romania: { label: 'Romania', color: 'hsl(0 80% 55%)' },
-  } as const), []);
+    Hungary: {
+      label: "Hungary",
+      color: "hsl(var(--chart-1))",
+    },
+    Poland: {
+      label: "Poland", 
+      color: "hsl(var(--chart-2))",
+    },
+    Slovakia: {
+      label: "Slovakia",
+      color: "hsl(var(--chart-3))",
+    },
+    Romania: {
+      label: "Romania",
+      color: "hsl(var(--chart-4))",
+    },
+  }), []);
+
+  if (error) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>General government debt (% of GDP)</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-red-500">{error}</p>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
-    <Card className="bg-gradient-surface">
-      <CardContent className="p-4">
-        <div className="mb-3 flex items-start justify-between gap-4">
-          <div>
-            <h3 className="text-base font-semibold">General government debt (% of GDP)</h3>
-            <p className="text-xs text-muted-foreground">Eurostat gov_10dd_edpt1 · unit: PC_GDP · sector: S13 · 2010–2024</p>
-          </div>
-          <a className="story-link text-xs" target="_blank" rel="noreferrer" href="https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/gov_10dd_edpt1?sinceTimePeriod=2010&untilTimePeriod=2024&geo=HU&geo=PL&geo=SK&geo=RO&unit=PC_GDP&sector=S13&format=JSON">Live source</a>
-        </div>
-        {error && (
-          <div className="text-sm text-destructive">{error}</div>
-        )}
-        <ChartContainer config={config} className="h-[260px] w-full">
-          <LineChart data={rows ?? []} margin={{ left: 12, right: 12, top: 6, bottom: 6 }}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="year" tickMargin={8} />
-            <YAxis tickMargin={8} />
-            <ChartTooltip content={<ChartTooltipContent />} />
-            <Line type="monotone" dataKey="Hungary" stroke="var(--color-Hungary)" strokeWidth={2} dot={false} />
-            <Line type="monotone" dataKey="Poland" stroke="var(--color-Poland)" strokeWidth={2} dot={false} />
-            <Line type="monotone" dataKey="Slovakia" stroke="var(--color-Slovakia)" strokeWidth={2} dot={false} />
-            <Line type="monotone" dataKey="Romania" stroke="var(--color-Romania)" strokeWidth={2} dot={false} />
-            <ChartLegend verticalAlign="bottom" content={<ChartLegendContent />} />
-          </LineChart>
+    <Card>
+      <CardHeader>
+        <CardTitle>General government debt (% of GDP)</CardTitle>
+        <CardDescription>
+          Source: Eurostat (gov_10dd_edpt1) • % of GDP
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <ChartContainer config={config}>
+          <ResponsiveContainer width="100%" height={350}>
+            <LineChart data={rows}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis 
+                dataKey="year" 
+                type="number"
+                scale="linear"
+                domain={['dataMin', 'dataMax']}
+              />
+              <YAxis domain={[0, 100]} />
+              <ChartTooltip />
+              <ChartLegend />
+              <Line 
+                type="monotone" 
+                dataKey="Hungary" 
+                stroke={config.Hungary.color}
+                strokeWidth={2}
+                dot={{ fill: config.Hungary.color }}
+              />
+              <Line 
+                type="monotone" 
+                dataKey="Poland" 
+                stroke={config.Poland.color}
+                strokeWidth={2}
+                dot={{ fill: config.Poland.color }}
+              />
+              <Line 
+                type="monotone" 
+                dataKey="Slovakia" 
+                stroke={config.Slovakia.color}
+                strokeWidth={2}
+                dot={{ fill: config.Slovakia.color }}
+              />
+              <Line 
+                type="monotone" 
+                dataKey="Romania" 
+                stroke={config.Romania.color}
+                strokeWidth={2}
+                dot={{ fill: config.Romania.color }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
         </ChartContainer>
       </CardContent>
     </Card>
