@@ -148,10 +148,36 @@ export const exportsShareGDP: Metric = {
   ]
 };
 
+export const lifeExpectancy: Metric = {
+  id: 'life_expectancy',
+  title: 'Egészségügyi mutatók (várható élettartam)',
+  unit: 'years',
+  note: 'Illustrative demo values. Use Eurostat demo_mlexpec.',
+  source: { label: 'Eurostat – Life expectancy (demo_mlexpec)', url: 'https://ec.europa.eu/eurostat' },
+  data: [
+    { year: 2010, Hungary: 74.7, Poland: 76.4, Slovakia: 75.1, Romania: 73.5 },
+    { year: 2011, Hungary: 74.9, Poland: 76.9, Slovakia: 75.4, Romania: 73.6 },
+    { year: 2012, Hungary: 75.2, Poland: 76.9, Slovakia: 76.0, Romania: 73.9 },
+    { year: 2013, Hungary: 75.9, Poland: 77.6, Slovakia: 76.0, Romania: 74.8 },
+    { year: 2014, Hungary: 76.0, Poland: 77.6, Slovakia: 76.7, Romania: 75.0 },
+    { year: 2015, Hungary: 76.2, Poland: 77.8, Slovakia: 77.0, Romania: 75.0 },
+    { year: 2016, Hungary: 76.4, Poland: 78.0, Slovakia: 77.4, Romania: 75.3 },
+    { year: 2017, Hungary: 76.0, Poland: 78.5, Slovakia: 77.4, Romania: 75.5 },
+    { year: 2018, Hungary: 76.4, Poland: 78.5, Slovakia: 77.4, Romania: 75.6 },
+    { year: 2019, Hungary: 76.4, Poland: 78.9, Slovakia: 77.8, Romania: 76.1 },
+    { year: 2020, Hungary: 76.4, Poland: 78.2, Slovakia: 77.5, Romania: 75.6 },
+    { year: 2021, Hungary: 75.1, Poland: 76.4, Slovakia: 77.0, Romania: 74.2 },
+    { year: 2022, Hungary: 76.4, Poland: 77.1, Slovakia: 77.7, Romania: 75.3 },
+    { year: 2023, Hungary: 76.8, Poland: 78.0, Slovakia: 78.1, Romania: 75.8 },
+    { year: 2024, Hungary: 77.1, Poland: 78.3, Slovakia: 78.4, Romania: 76.2 }
+  ]
+};
+
 export const TOP5_METRICS: Metric[] = [
   gdpPerCapitaEUR,
   employmentRate2064,
   birthRate,
   rndIntensity,
-  exportsShareGDP
+  exportsShareGDP,
+  lifeExpectancy
 ];
