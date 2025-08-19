@@ -73,28 +73,28 @@ export const employmentRate2064: Metric = {
   ]
 };
 
-export const cpiInflation: Metric = {
-  id: 'cpi_infl',
-  title: 'CPI inflation (annual average)',
-  unit: '%',
-  note: 'Illustrative demo values. Use Eurostat prc_hicp_aind.',
-  source: { label: 'Eurostat – HICP (prc_hicp_aind)', url: 'https://ec.europa.eu/eurostat' },
+export const birthRate: Metric = {
+  id: 'birth_rate',
+  title: 'Crude birth rate',
+  unit: 'per 1000 population',
+  note: 'Illustrative demo values. Use Eurostat demo_gind.',
+  source: { label: 'Eurostat – Crude birth rate (demo_gind)', url: 'https://ec.europa.eu/eurostat' },
   data: [
-    { year: 2010, Hungary: 4.9, Poland: 2.6, Slovakia: 1.0, Romania: 6.1 },
-    { year: 2011, Hungary: 3.9, Poland: 4.3, Slovakia: 4.1, Romania: 5.8 },
-    { year: 2012, Hungary: 5.7, Poland: 3.7, Slovakia: 3.6, Romania: 3.3 },
-    { year: 2013, Hungary: 1.7, Poland: 0.8, Slovakia: 1.5, Romania: 3.2 },
-    { year: 2014, Hungary: -0.2, Poland: 0.1, Slovakia: -0.1, Romania: 1.1 },
-    { year: 2015, Hungary: -0.1, Poland: -0.7, Slovakia: -0.3, Romania: -0.6 },
-    { year: 2016, Hungary: 0.4, Poland: -0.6, Slovakia: -0.5, Romania: -1.5 },
-    { year: 2017, Hungary: 2.4, Poland: 2.0, Slovakia: 1.3, Romania: 1.3 },
-    { year: 2018, Hungary: 2.9, Poland: 1.7, Slovakia: 2.5, Romania: 4.1 },
-    { year: 2019, Hungary: 3.4, Poland: 2.3, Slovakia: 2.8, Romania: 3.9 },
-    { year: 2020, Hungary: 3.4, Poland: 3.4, Slovakia: 2.0, Romania: 2.6 },
-    { year: 2021, Hungary: 5.1, Poland: 5.2, Slovakia: 3.2, Romania: 5.1 },
-    { year: 2022, Hungary: 14.5, Poland: 14.2, Slovakia: 12.1, Romania: 13.8 },
-    { year: 2023, Hungary: 17.0, Poland: 11.9, Slovakia: 10.5, Romania: 10.4 },
-    { year: 2024, Hungary: 6.0, Poland: 4.5, Slovakia: 5.5, Romania: 7.0 }
+    { year: 2010, Hungary: 9.0, Poland: 10.8, Slovakia: 11.2, Romania: 10.5 },
+    { year: 2011, Hungary: 8.8, Poland: 10.0, Slovakia: 11.1, Romania: 9.8 },
+    { year: 2012, Hungary: 9.1, Poland: 10.0, Slovakia: 10.3, Romania: 9.8 },
+    { year: 2013, Hungary: 8.9, Poland: 9.7, Slovakia: 9.6, Romania: 9.4 },
+    { year: 2014, Hungary: 9.5, Poland: 9.9, Slovakia: 10.3, Romania: 9.8 },
+    { year: 2015, Hungary: 9.4, Poland: 9.7, Slovakia: 10.3, Romania: 9.2 },
+    { year: 2016, Hungary: 9.7, Poland: 9.6, Slovakia: 10.9, Romania: 9.0 },
+    { year: 2017, Hungary: 9.6, Poland: 10.9, Slovakia: 10.7, Romania: 9.2 },
+    { year: 2018, Hungary: 9.9, Poland: 10.9, Slovakia: 10.7, Romania: 8.9 },
+    { year: 2019, Hungary: 9.6, Poland: 9.9, Slovakia: 10.5, Romania: 9.3 },
+    { year: 2020, Hungary: 9.5, Poland: 9.8, Slovakia: 10.7, Romania: 9.2 },
+    { year: 2021, Hungary: 9.5, Poland: 9.4, Slovakia: 10.8, Romania: 8.6 },
+    { year: 2022, Hungary: 8.9, Poland: 8.9, Slovakia: 9.8, Romania: 8.1 },
+    { year: 2023, Hungary: 8.9, Poland: 8.2, Slovakia: 9.0, Romania: 7.6 },
+    { year: 2024, Hungary: 9.1, Poland: 8.0, Slovakia: 8.8, Romania: 7.8 }
   ]
 };
 
@@ -151,7 +151,7 @@ export const exportsShareGDP: Metric = {
 export const TOP5_METRICS: Metric[] = [
   gdpPerCapitaEUR,
   employmentRate2064,
-  cpiInflation,
+  birthRate,
   rndIntensity,
   exportsShareGDP
 ];
