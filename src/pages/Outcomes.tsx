@@ -3,22 +3,39 @@ import SiteHeader from '@/components/SiteHeader';
 import { OutcomeTracker } from '@/components/OutcomeTracker';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import { BarChart3, TrendingUp } from 'lucide-react';
 
 const OutcomesPage = () => {
   return (
     <>
       <SEO
-        title="NER 2010-2025 outcomes | BuildHungary"
-        description="Track key outcomes across 15 years of NER: infrastructure, economy, education, healthcare, governance."
-        canonical={typeof window !== 'undefined' ? window.location.origin + '/outcomes' : undefined}
+        title="Eredmények 2010-2024 | VálasztásFigyelő"
+        description="A Fidesz-kormányok 16 évének főbb kezdeményezései és értékelésük. Infrastruktúra, gazdaság, oktatás, egészségügy, kormányzás."
+        canonical={typeof window !== 'undefined' ? window.location.origin + '/eredmenyek' : undefined}
       />
       <SiteHeader />
       <main>
         <section className="container mx-auto px-4 py-8">
-          <h1 className="mb-2 text-3xl font-bold">NER 2010-2025 outcomes</h1>
-          <p className="mb-6 text-muted-foreground">A clear overview of major outcomes and their current status.</p>
+          <div className="mb-6">
+            <h1 className="mb-2 text-3xl font-bold">Eredmények 2010-2024</h1>
+            <p className="max-w-2xl text-muted-foreground">
+              A Fidesz-KDNP kormányok 16 évének főbb kezdeményezései és azok értékelése.
+              Minden értékelés nyilvános forrásokra támaszkodik.
+            </p>
+          </div>
           <div className="flex flex-wrap gap-3">
-            <Button asChild size="sm" variant="outline"><Link to="/outcomes/competitiveness">View Competitiveness Insights</Link></Button>
+            <Button asChild size="sm" variant="outline" className="gap-2">
+              <Link to="/versenyképesség">
+                <BarChart3 className="h-4 w-4" />
+                Versenyképességi adatok
+              </Link>
+            </Button>
+            <Button asChild size="sm" variant="outline" className="gap-2">
+              <Link to="/kormany-2022">
+                <TrendingUp className="h-4 w-4" />
+                Kormány 2022+ ígéretek
+              </Link>
+            </Button>
           </div>
         </section>
         <OutcomeTracker />

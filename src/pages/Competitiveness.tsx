@@ -2,6 +2,7 @@ import SEO from '@/components/SEO';
 import SiteHeader from '@/components/SiteHeader';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import { ArrowLeft, FileText } from 'lucide-react';
 import LiveGDPPerCapitaChart from '@/components/LiveGDPPerCapitaChart';
 import LiveDebtToGDPChart from '@/components/LiveDebtToGDPChart';
 import LiveEmploymentRateChart from '@/components/LiveEmploymentRateChart';
@@ -14,20 +15,34 @@ const Competitiveness = () => {
   return (
     <>
       <SEO
-        title="Competitiveness Insights | BuildHungary"
-        description="Top 5 indicators for competitiveness across Hungary, Poland, Slovakia, and Romania."
-        canonical={typeof window !== 'undefined' ? window.location.origin + '/outcomes/competitiveness' : undefined}
+        title="Versenyképesség | VálasztásFigyelő"
+        description="Magyarország összehasonlítása a V4 országokkal: GDP, államadósság, foglalkoztatás, születési ráta, K+F, export, várható élettartam."
+        canonical={typeof window !== 'undefined' ? window.location.origin + '/versenyképesség' : undefined}
       />
       <SiteHeader />
       <main>
         <section className="container mx-auto px-4 py-8">
-          <h1 className="mb-2 text-3xl font-bold">Competitiveness Insights</h1>
-          <p className="mb-6 max-w-2xl text-muted-foreground">
-            A focused subsite with five comparative charts on key economic and social indicators that influence competitiveness. Countries: Hungary, Poland, Slovakia, Romania.
-          </p>
+          <div className="mb-6">
+            <h1 className="mb-2 text-3xl font-bold">Versenyképességi mutatók</h1>
+            <p className="max-w-2xl text-muted-foreground">
+              Magyarország összehasonlítása a visegrádi országokkal (Lengyelország, Szlovákia, Románia)
+              kulcsfontosságú gazdasági és társadalmi mutatók mentén.
+            </p>
+          </div>
+
           <div className="mb-6 flex flex-wrap gap-3">
-            <Button asChild variant="outline" size="sm"><Link to="/outcomes">Back to Outcomes</Link></Button>
-            <Button asChild variant="hero" size="sm"><Link to="/promises">Go to Promise Tracker</Link></Button>
+            <Button asChild variant="outline" size="sm" className="gap-2">
+              <Link to="/eredmenyek">
+                <ArrowLeft className="h-4 w-4" />
+                Vissza az eredményekhez
+              </Link>
+            </Button>
+            <Button asChild size="sm" className="gap-2">
+              <Link to="/programok">
+                <FileText className="h-4 w-4" />
+                2026 Programok
+              </Link>
+            </Button>
           </div>
 
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
@@ -40,8 +55,12 @@ const Competitiveness = () => {
             <LiveLifeExpectancyChart />
           </div>
 
-          <div className="mt-8 rounded-lg border p-4 text-sm text-muted-foreground">
-            Note: All charts display live data from Eurostat APIs. Data is fetched in real-time and may not be available for the most recent periods due to reporting delays.
+          <div className="mt-8 rounded-lg border bg-muted/30 p-4 text-sm text-muted-foreground">
+            <p className="font-medium">Adatforrás: Eurostat API</p>
+            <p className="mt-1">
+              Minden grafikon élő adatokat jelenít meg az Eurostat adatbázisából.
+              A legfrissebb időszakok adatai a jelentési késedelmek miatt nem mindig elérhetők.
+            </p>
           </div>
         </section>
       </main>

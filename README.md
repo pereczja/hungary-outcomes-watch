@@ -1,73 +1,97 @@
-# Welcome to your Lovable project
+# VálasztásFigyelő 🗳️
 
-## Project info
+**Tényalapú, elfogulatlan választási összehasonlító platform a 2026-os magyar országgyűlési választásra.**
 
-**URL**: https://lovable.dev/projects/48bc7ad2-3d39-4b88-8aa0-3480151e2731
+> Nem jobb, nem bal – tények.
 
-## How can I edit this code?
+## Mi ez?
 
-There are several ways of editing your application.
+A VálasztásFigyelő egy nyílt forráskódú platform, amely átláthatóan mutatja be:
 
-**Use Lovable**
+- **2026-os választási programok** – Fidesz és Tisza párt programjainak tématerület szerinti összehasonlítása
+- **Kormányzati eredmények (2010-2024)** – A Fidesz-kormányok 16 évének főbb kezdeményezései és értékelésük
+- **Versenyképességi mutatók** – Magyarország összehasonlítása a V4 országokkal (Eurostat élő adatok)
+- **Kormány 2022+** – Az aktuális kormányzati ciklus ígéretei és teljesítésük
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/48bc7ad2-3d39-4b88-8aa0-3480151e2731) and start prompting.
+## Alapelvek
 
-Changes made via Lovable will be committed automatically to this repo.
+- **Elfogulatlanság** – Nem vagyunk semmilyen párttal kapcsolatban. Minden oldalt ugyanazzal a mércével mérünk.
+- **Forrásmegjelölés** – Minden állítás mögött ellenőrizhető forrás (EU, OECD, KSH, hivatalos dokumentumok).
+- **Nyílt forráskód** – Bárki javasolhat javítást vagy új adatforrást.
 
-**Use your preferred IDE**
+## Gyors indítás
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+```bash
+# Klónozás
+git clone https://github.com/pereczja/hungary-outcomes-watch.git
+cd hungary-outcomes-watch
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+# Függőségek telepítése
+npm install
 
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Fejlesztői szerver indítása
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Az alkalmazás elérhető: http://localhost:8080
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Struktúra
 
-**Use GitHub Codespaces**
+```
+src/
+├── data/
+│   ├── programs2026.ts      # 2026-os párt programok (Fidesz, Tisza)
+│   ├── nerOutcomes.ts       # NER 2010-2024 kezdeményezések
+│   ├── ov2022.ts            # Kormány 2022+ ígéretek
+│   └── competitiveness.ts   # Versenyképességi adatok
+├── components/
+│   ├── ProgramComparison.tsx # Program összehasonlító
+│   ├── OutcomeTracker.tsx    # Eredmények tracker
+│   └── Live*Chart.tsx        # Eurostat élő grafikonok
+├── pages/
+│   ├── Index.tsx            # Főoldal
+│   ├── Programs.tsx         # /programok
+│   ├── Outcomes.tsx         # /eredmenyek
+│   ├── Competitiveness.tsx  # /versenyképesség
+│   └── OV2022.tsx           # /kormany-2022
+└── App.tsx                  # Router
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Tisza program integrálása (szombat)
 
-## What technologies are used for this project?
+A Tisza Párt hivatalos programja 2026. február 8-án kerül publikálásra.
 
-This project is built with:
+**Gyors integráció:**
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+1. Nyisd meg: `src/data/programs2026.ts`
+2. Keresd meg a `tisza` pozíciókat minden `policyAreas` elemben
+3. Frissítsd a `summary`, `details`, és `sources` mezőket
+4. Változtasd a `status`-t `'pending'`-ről `'detailed'`-re
+5. `npm run build && git commit`
 
-## How can I deploy this project?
+Alternatív: használd a `scripts/import-tisza-program.ts` segédscriptet.
 
-Simply open [Lovable](https://lovable.dev/projects/48bc7ad2-3d39-4b88-8aa0-3480151e2731) and click on Share -> Publish.
+## Tech stack
 
-## Can I connect a custom domain to my Lovable project?
+- **Framework:** React 18 + TypeScript
+- **Build:** Vite 5
+- **Styling:** Tailwind CSS + shadcn/ui
+- **Charts:** Recharts + Eurostat API
+- **State:** TanStack Query
 
-Yes, you can!
+## Közreműködés
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+Pull request-eket szívesen fogadunk! Különösen:
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+- Új adatforrások és források ellenőrzése
+- UI/UX javítások
+- Fordítások
+- Hibák jelentése
+
+## Licensz
+
+MIT
+
+---
+
+**Fontos:** Ez az oldal kizárólag tájékoztatási célokat szolgál. Nem vagyunk semmilyen párttal vagy politikai szervezettel kapcsolatban.
