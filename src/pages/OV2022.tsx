@@ -39,37 +39,23 @@ const tipusLabel: Record<OVItemType, string> = {
 
 const OV2022Page = () => {
   const [query, setQuery] = useState('');
-  const patched = useMemo(() => {
-    return ov2022Items.map((i) => {
-      switch (i.id) {
-        case 'ov-12':
-          return { ...i, status: 'csúszik', megjegyzes: 'Többszöri halasztás; kommunikált mérföldkövek mellett termelés még nem indult.' } as OVItem;
-        case 'ov-7':
-          return { ...i, status: 'csúszik', megjegyzes: 'Céldátumok módosultak; 2025-ös kommunikáció a fordulat évéről.' } as OVItem;
-        case 'ov-2':
-          return { ...i, megjegyzes: 'Cél: egyszámjegy 2023 végére; 2023 Q4-ben egyszámjegy, később változó pálya.' } as OVItem;
-        default:
-          return i;
-      }
-    });
-  }, []);
 
   const rows = useMemo(() => {
     const q = query.toLowerCase();
-    return patched.filter((i) =>
+    return ov2022Items.filter((i) =>
       i.tema.toLowerCase().includes(q) ||
       i.tetel.toLowerCase().includes(q) ||
       i.tipus.toLowerCase().includes(q) ||
       (i.megjegyzes?.toLowerCase().includes(q) ?? false)
     );
-  }, [query, patched]);
+  }, [query]);
 
   // Stats
   const stats = {
-    total: patched.length,
-    folyamatban: patched.filter(i => i.status === 'folyamatban').length,
-    teljesitve: patched.filter(i => i.status === 'teljesítve').length,
-    csuszik: patched.filter(i => i.status === 'csúszik').length,
+    total: ov2022Items.length,
+    folyamatban: ov2022Items.filter(i => i.status === 'folyamatban').length,
+    teljesitve: ov2022Items.filter(i => i.status === 'teljesítve').length,
+    csuszik: ov2022Items.filter(i => i.status === 'csúszik').length,
   };
 
   return (
