@@ -89,7 +89,7 @@ const LiveLifeExpectancyChart = () => {
           <LineChart data={rows ?? []} margin={{ left: 12, right: 12, top: 6, bottom: 6 }}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="year" tickMargin={8} />
-            <YAxis tickMargin={8} />
+            <YAxis tickMargin={8} domain={[60, 90]} />
             <ChartTooltip content={<ChartTooltipContent />} />
             <Line type="monotone" dataKey="Hungary" stroke="var(--color-Hungary)" strokeWidth={2} dot={false} />
             <Line type="monotone" dataKey="Poland" stroke="var(--color-Poland)" strokeWidth={2} dot={false} />

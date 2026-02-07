@@ -1,8 +1,11 @@
 import { promises as rows, type PromiseCompare, type PromiseStatus } from '@/data/promises';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { useMemo, useState } from 'react';
 import { Input } from '@/components/ui/input';
+import { Link } from 'react-router-dom';
+import { FileText, MessageCircle } from 'lucide-react';
 
 const statusClass: Record<PromiseStatus, string> = {
   'achieved': 'bg-success text-success-foreground',
@@ -39,6 +42,28 @@ export const PromiseTracker = () => {
           onChange={(e) => setQuery(e.target.value)}
           className="w-72"
         />
+      </div>
+
+      {/* Quick Links */}
+      <div className="mb-6 flex flex-wrap gap-3">
+        <Button asChild variant="outline" size="sm">
+          <Link to="/promises/ov-2022">
+            <FileText className="mr-2 h-4 w-4" />
+            Kormány 2022
+          </Link>
+        </Button>
+        <Button asChild variant="default" size="sm">
+          <Link to="/tisza-2026">
+            <FileText className="mr-2 h-4 w-4" />
+            Tisza 2026 Program
+          </Link>
+        </Button>
+        <Button asChild variant="secondary" size="sm">
+          <Link to="/tisza-2026/chat">
+            <MessageCircle className="mr-2 h-4 w-4" />
+            Beszélgess a Tisza programmal
+          </Link>
+        </Button>
       </div>
 
       <div className="overflow-hidden rounded-lg border">
