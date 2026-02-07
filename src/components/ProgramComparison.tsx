@@ -185,16 +185,23 @@ export const ProgramComparison = () => {
       </div>
 
       {/* Status Banner */}
-      <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 p-4 dark:border-blue-900 dark:bg-blue-950/30">
+      <div className="mb-6 rounded-lg border border-green-200 bg-green-50 p-4 dark:border-green-900 dark:bg-green-950/30">
         <div className="flex items-start gap-3">
-          <AlertCircle className="mt-0.5 h-5 w-5 text-blue-600 dark:text-blue-400" />
+          <CheckCircle className="mt-0.5 h-5 w-5 text-green-600 dark:text-green-400" />
           <div>
-            <p className="font-medium text-blue-900 dark:text-blue-100">
-              Tisza program hamarosan
+            <p className="font-medium text-green-900 dark:text-green-100">
+              Tisza program megjelent!
             </p>
-            <p className="text-sm text-blue-700 dark:text-blue-300">
-              A Tisza Párt hivatalos programja 2026. február 8-án (szombaton) kerül publikálásra.
-              Amint megjelenik, frissítjük az összehasonlítást.
+            <p className="text-sm text-green-700 dark:text-green-300">
+              A Tisza Párt 2026. február 7-én bemutatta 240 oldalas „Működő és emberséges Magyarország alapjai" című programját.{' '}
+              <a
+                href="https://magyartisza.hu/program"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline hover:text-green-900 dark:hover:text-green-100"
+              >
+                Teljes program →
+              </a>
             </p>
           </div>
         </div>

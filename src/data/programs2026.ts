@@ -62,8 +62,8 @@ export const parties: Party[] = [
     shortName: 'Tisza',
     color: 'blue',
     leader: 'Magyar Péter',
-    programUrl: undefined, // Szombaton jön!
-    programDate: undefined,
+    programUrl: 'https://magyartisza.hu/program',
+    programDate: '2026-02-07',
   },
 ];
 
@@ -87,12 +87,16 @@ export const policyAreas: PolicyArea[] = [
         ],
       },
       tisza: {
-        summary: 'Program szombaton kerül publikálásra.',
-        status: 'pending',
-        sources: [],
+        summary: 'Minimálbér SZJA-mentessége, mediánbér alatti jövedelmek adócsökkentése, milliárdosadó.',
+        details: 'SZJA 15%→9% minimálbérnél, mediánbér alatti 2,2M munkavállaló adóterhe csökken. Ganz Ábrahám Gazdaságfejlesztési Program: EU-források hazahozatala, KKV-k adminisztratív terheinek felezése, innovációs kiadások 1,5×-ösre emelése. Költségvetési hiány 3% alá 2030-ra.',
+        status: 'detailed',
+        sources: [
+          { label: 'Tisza Program 2026', url: 'https://magyartisza.hu/program', date: '2026-02-07' },
+          { label: 'Portfolio összefoglaló', url: 'https://www.portfolio.hu/gazdasag/20260207/itt-a-tisza-part-gazdasagi-programja-816528', date: '2026-02-07' },
+        ],
       },
     },
-    lastUpdated: '2026-02-03',
+    lastUpdated: '2026-02-07',
   },
   {
     id: 'healthcare',
@@ -111,12 +115,16 @@ export const policyAreas: PolicyArea[] = [
         ],
       },
       tisza: {
-        summary: 'Program szombaton kerül publikálásra.',
-        status: 'pending',
-        sources: [],
+        summary: 'Önálló minisztérium, +500 Mrd Ft/év, várólisták felszámolása, új megyei szuperkórházak.',
+        details: 'Egészségügyi minisztérium vétójoggal a költségvetésnél. 2030-tól GDP 7%-a egészségügyre. Várólisták 6 hónapra (fekvő) / 2 hónapra (járó) 2027 végéig. Új megyei kórházak építése, meglévők modernizálása. Orvos- és nővérbérek versenyképessé tétele.',
+        status: 'detailed',
+        sources: [
+          { label: 'Tisza Program 2026', url: 'https://magyartisza.hu/program', date: '2026-02-07' },
+          { label: 'HVG összefoglaló', url: 'https://hvg.hu/itthon/20260207_magyar-peter-tisza-program-bemutato-elo-kozvetites', date: '2026-02-07' },
+        ],
       },
     },
-    lastUpdated: '2026-02-03',
+    lastUpdated: '2026-02-07',
   },
   {
     id: 'education',
@@ -135,12 +143,16 @@ export const policyAreas: PolicyArea[] = [
         ],
       },
       tisza: {
-        summary: 'Program szombaton kerül publikálásra.',
-        status: 'pending',
-        sources: [],
+        summary: 'Önálló minisztérium, pedagógusbér-emelés, egyetemi autonómia, Erasmus visszaszerzése.',
+        details: 'Oktatási minisztérium visszaállítása. Állami tankönyv-monopólium megszüntetése. Egyetemi autonómia helyreállítása, alapítványi modell felülvizsgálata. Erasmus és EU-programok visszaszerzése. PISA-eredmények javítása célzott programokkal.',
+        status: 'detailed',
+        sources: [
+          { label: 'Tisza Program 2026', url: 'https://magyartisza.hu/program', date: '2026-02-07' },
+          { label: 'Euronews összefoglaló', url: 'https://hu.euronews.com/2026/02/07/reszleges-szja-csokkentes-az-oktatas-felviragoztatasa-euro-programot-hirdetett-a-tisza-par', date: '2026-02-07' },
+        ],
       },
     },
-    lastUpdated: '2026-02-03',
+    lastUpdated: '2026-02-07',
   },
   {
     id: 'eu-relations',
@@ -159,12 +171,15 @@ export const policyAreas: PolicyArea[] = [
         ],
       },
       tisza: {
-        summary: 'Program szombaton kerül publikálásra.',
-        status: 'pending',
-        sources: [],
+        summary: 'EU-integráció megerősítése, nyugat-orientált külpolitika, befagyasztott források feloldása.',
+        details: 'Szuverén, de egyértelműen EU- és NATO-párti irányvonal. EPPO-csatlakozás. Jogállamisági kritériumok teljesítése, ~30 Mrd EUR EU-forrás felszabadítása. Euró bevezetésének előkészítése. Konstruktív EU-partnerség vétópolitika helyett.',
+        status: 'detailed',
+        sources: [
+          { label: 'Tisza Program 2026', url: 'https://magyartisza.hu/program', date: '2026-02-07' },
+        ],
       },
     },
-    lastUpdated: '2026-02-03',
+    lastUpdated: '2026-02-07',
   },
   {
     id: 'corruption',
@@ -183,12 +198,16 @@ export const policyAreas: PolicyArea[] = [
         ],
       },
       tisza: {
-        summary: 'Program szombaton kerül publikálásra.',
-        status: 'pending',
-        sources: [],
+        summary: 'EPPO-csatlakozás, valódi közbeszerzési verseny, NER-közeli cégek támogatásának megszüntetése.',
+        details: 'Európai Ügyészséghez (EPPO) csatlakozás. Közbeszerzési rendszer átláthatóvá tétele, valódi verseny. NER-közeli cégek elvtelen támogatásának leállítása – becsült megtakarítás ~600 Mrd Ft/év. Ellopott közvagyon visszaszerzése. Független intézmények megerősítése.',
+        status: 'detailed',
+        sources: [
+          { label: 'Tisza Program 2026', url: 'https://magyartisza.hu/program', date: '2026-02-07' },
+          { label: '444 összefoglaló', url: 'https://444.hu/2026/02/07/mukodo-es-emberseges-magyarorszag-magyar-peter-es-a-tisza-hozzakezdett-programja-ismertetesehez', date: '2026-02-07' },
+        ],
       },
     },
-    lastUpdated: '2026-02-03',
+    lastUpdated: '2026-02-07',
   },
   {
     id: 'housing',
@@ -207,12 +226,15 @@ export const policyAreas: PolicyArea[] = [
         ],
       },
       tisza: {
-        summary: 'Program szombaton kerül publikálásra.',
-        status: 'pending',
-        sources: [],
+        summary: 'Megfizethető lakhatás, fiatalok támogatása, bérlakás-program indítása.',
+        details: 'Lakhatási program fiataloknak és családoknak. Állami bérlakás-állomány bővítése. Lakásárak emelkedésének fékezése szabályozással. Részletek a 240 oldalas programban.',
+        status: 'announced',
+        sources: [
+          { label: 'Tisza Program 2026', url: 'https://magyartisza.hu/program', date: '2026-02-07' },
+        ],
       },
     },
-    lastUpdated: '2026-02-03',
+    lastUpdated: '2026-02-07',
   },
   {
     id: 'family',
@@ -231,12 +253,16 @@ export const policyAreas: PolicyArea[] = [
         ],
       },
       tisza: {
-        summary: 'Program szombaton kerül publikálásra.',
-        status: 'pending',
-        sources: [],
+        summary: '100% Család program: családi pótlék duplázása, 50e Ft újszülött-csomag, 20e új idősgondozási hely.',
+        details: 'Népességfogyás megállítása 2035-ig, 2050-re 10M+ cél. „Vár a hazád!" program: 200 ezer hazatelepülő 8 év alatt. Családi pótlék megduplázása. 50.000 Ft értékű újszülött-csomag. Idősgondozás: 20.000 új intézményi férőhely.',
+        status: 'detailed',
+        sources: [
+          { label: 'Tisza Program 2026', url: 'https://magyartisza.hu/program', date: '2026-02-07' },
+          { label: 'Infostart összefoglaló', url: 'https://infostart.hu/belfold/2026/02/07/a-tisza-part-bemutatta-240-oldalas-programjat', date: '2026-02-07' },
+        ],
       },
     },
-    lastUpdated: '2026-02-03',
+    lastUpdated: '2026-02-07',
   },
   {
     id: 'energy',
@@ -255,12 +281,16 @@ export const policyAreas: PolicyArea[] = [
         ],
       },
       tisza: {
-        summary: 'Program szombaton kerül publikálásra.',
-        status: 'pending',
-        sources: [],
+        summary: 'Orosz energiafüggőség megszüntetése 2035-ig, megújulók duplázása 2040-ig, rezsicsökkentés+.',
+        details: 'Orosz gáz- és olajfüggőség felszámolása 2035-ig. Megújuló energia arányának megduplázása 2040-ig. Rezsicsökkentés kiterjesztése („rezsicsökkentés plusz") – alacsony jövedelműek védelme. Akkumulátorgyárak felülvizsgálata.',
+        status: 'detailed',
+        sources: [
+          { label: 'Tisza Program 2026', url: 'https://magyartisza.hu/program', date: '2026-02-07' },
+          { label: '444 összefoglaló', url: 'https://444.hu/2026/02/07/mukodo-es-emberseges-magyarorszag-magyar-peter-es-a-tisza-hozzakezdett-programja-ismertetesehez', date: '2026-02-07' },
+        ],
       },
     },
-    lastUpdated: '2026-02-03',
+    lastUpdated: '2026-02-07',
   },
   {
     id: 'media-freedom',
@@ -279,12 +309,15 @@ export const policyAreas: PolicyArea[] = [
         ],
       },
       tisza: {
-        summary: 'Program szombaton kerül publikálásra.',
-        status: 'pending',
-        sources: [],
+        summary: 'Független közmédia, KESMA felszámolása, plurális médiarendszer.',
+        details: 'Közmédia függetlenségének helyreállítása. KESMA-birodalom felszámolása. Független sajtó működési feltételeinek biztosítása. Médiapiac versenyének helyreállítása.',
+        status: 'announced',
+        sources: [
+          { label: 'Tisza Program 2026', url: 'https://magyartisza.hu/program', date: '2026-02-07' },
+        ],
       },
     },
-    lastUpdated: '2026-02-03',
+    lastUpdated: '2026-02-07',
   },
   {
     id: 'justice',
@@ -303,12 +336,16 @@ export const policyAreas: PolicyArea[] = [
         ],
       },
       tisza: {
-        summary: 'Program szombaton kerül publikálásra.',
-        status: 'pending',
-        sources: [],
+        summary: 'Jogrendszer gyökeres átalakítása, bírói függetlenség, ügyészség reformja.',
+        details: 'Igazságszolgáltatás függetlenségének helyreállítása. Legfőbb ügyész demokratikus kontrollja. Alkotmánybíróság depolitizálása. Fékek és ellensúlyok rendszerének megerősítése.',
+        status: 'announced',
+        sources: [
+          { label: 'Tisza Program 2026', url: 'https://magyartisza.hu/program', date: '2026-02-07' },
+          { label: 'Vadhajtások', url: 'https://www.vadhajtasok.hu/2026/02/04/magyar-peter-es-a-tisza-part-a-jogrendszer-a-jogi-kornyezet-gyokeres-atalakitasara-keszul', date: '2026-02-04' },
+        ],
       },
     },
-    lastUpdated: '2026-02-03',
+    lastUpdated: '2026-02-07',
   },
   {
     id: 'defense',
@@ -327,12 +364,16 @@ export const policyAreas: PolicyArea[] = [
         ],
       },
       tisza: {
-        summary: 'Program szombaton kerül publikálásra.',
-        status: 'pending',
-        sources: [],
+        summary: 'NATO-elkötelezettség, nincs sorkötelezettség, nem küld katonákat Ukrajnába.',
+        details: 'Egyértelmű NATO-elkötelezettség. Nem küld magyar katonákat az orosz-ukrán háborúba. Nem állítja vissza a sorkötelezettséget. Haderő modernizálása, de békepárti külpolitika.',
+        status: 'detailed',
+        sources: [
+          { label: 'Tisza Program 2026', url: 'https://magyartisza.hu/program', date: '2026-02-07' },
+          { label: 'Infostart összefoglaló', url: 'https://infostart.hu/belfold/2026/02/07/a-tisza-part-bemutatta-240-oldalas-programjat', date: '2026-02-07' },
+        ],
       },
     },
-    lastUpdated: '2026-02-03',
+    lastUpdated: '2026-02-07',
   },
   {
     id: 'environment',
@@ -351,12 +392,16 @@ export const policyAreas: PolicyArea[] = [
         ],
       },
       tisza: {
-        summary: 'Program szombaton kerül publikálásra.',
-        status: 'pending',
-        sources: [],
+        summary: 'Zöld átállás, megújulók bővítése, akkumulátorgyárak felülvizsgálata.',
+        details: 'Fenntarthatóság és jövőállóság a program negyedik pillére. Megújuló energia arány duplázása 2040-ig. Akkumulátorgyár-beruházások környezeti hatásainak felülvizsgálata. Klímapolitikai célok EU-szintű harmonizálása.',
+        status: 'announced',
+        sources: [
+          { label: 'Tisza Program 2026', url: 'https://magyartisza.hu/program', date: '2026-02-07' },
+          { label: '444 összefoglaló', url: 'https://444.hu/2026/02/07/mukodo-es-emberseges-magyarorszag-magyar-peter-es-a-tisza-hozzakezdett-programja-ismertetesehez', date: '2026-02-07' },
+        ],
       },
     },
-    lastUpdated: '2026-02-03',
+    lastUpdated: '2026-02-07',
   },
 ];
 
