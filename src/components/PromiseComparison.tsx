@@ -1,4 +1,6 @@
 import { cn } from "@/lib/utils";
+import { Link } from "react-router-dom";
+import { ArrowRight, MessageCircle } from "lucide-react";
 
 interface ProgramRow {
   topic: string;
@@ -16,7 +18,7 @@ interface ProgramRow {
 }
 
 // Programok - hivatalos dokumentumokból
-// "no_plan" = nincs hivatalos vállalás a témában
+// Tisza: "A működő és emberséges Magyarország alapjai" (2026.02.08)
 const programs: ProgramRow[] = [
   {
     topic: "Egeszsegugy",
@@ -27,65 +29,79 @@ const programs: ProgramRow[] = [
       source: "Kormanyprogram 2022",
     },
     tisza: {
-      text: "+500 Mrd Ft/ev, 2035-ig szuperkorhaz minden regioban",
+      text: "Hugonnai Vilma Program: +500 Mrd Ft/év, várólisták csökkentése, háziorvos-hiány megoldása",
       status: "planned",
-      source: "Magyar Peter nyilatkozatai",
+      source: "Tisza program 138.o.",
     },
   },
   {
     topic: "SZJA",
-    topicDetail: "Szemelyi jovedelemado",
+    topicDetail: "Személyi jövedelemadó",
     fidesz: {
-      text: "15%-os flat tax fenntartasa",
+      text: "15%-os flat tax fenntartása",
       status: "implemented",
-      source: "SZJA torveny",
+      source: "SZJA törvény",
     },
     tisza: {
-      text: "Egyszamjegyu SZJA, tobbkulcsos rendszer",
+      text: "Minimálbér adója 15%→9%, mediánbér alattiak adócsökkentése (2.2M fő)",
       status: "planned",
-      source: "Tisza Part kommunikacio",
+      source: "Tisza program 54.o.",
     },
   },
   {
     topic: "Europai Ugyeszseg",
     topicDetail: "EPPO csatlakozas",
     fidesz: {
-      text: "Nem tervezi a csatlakozast",
+      text: "Nem tervezi a csatlakozást",
       status: "no_plan",
-      source: "Kormany allaspontja",
+      source: "Kormány álláspont",
     },
     tisza: {
-      text: "Azonnali csatlakozas, EU forrasok visszahozasa",
+      text: "Azonnali csatlakozás, uniós források hazahozása (8000 Mrd Ft)",
       status: "planned",
-      source: "Tisza Part program",
+      source: "Tisza program 118.o.",
     },
   },
   {
-    topic: "Oktatas",
-    topicDetail: "Iranyitas, autonomia",
+    topic: "Oktatás",
+    topicDetail: "Irányítás, autonómia",
     fidesz: {
-      text: "Jelenlegi rendszer (Belugyminiszterium alatt)",
+      text: "Jelenlegi rendszer (Belügyminisztérium alatt)",
       status: "implemented",
-      source: "Hatalyos jogszabalyok",
+      source: "Hatályos jogszabályok",
     },
     tisza: {
-      text: "Onallo miniszterium, Klebelsberg megszuntetese",
+      text: "Klebelsberg Központ radikális átalakítása, miniszteri vétójog, pedagógus béremelés",
       status: "planned",
-      source: "Tisza Part program",
+      source: "Tisza program 165.o.",
     },
   },
   {
-    topic: "Alapelelmiszer AFA",
-    topicDetail: "AFA csokkentes",
+    topic: "Vagyonadó",
+    topicDetail: "Milliárdosok adóztatása",
     fidesz: {
-      text: "Celzott intezkedesek",
-      status: "planned",
-      source: "Kormany bejelentesek",
+      text: "Nem tervezi",
+      status: "no_plan",
+      source: "Kormány álláspont",
     },
     tisza: {
-      text: "5%-ra csokkentes (gyumolcs, zoldseg)",
+      text: "1% vagyonadó 1 milliárd Ft feletti vagyonokra",
       status: "planned",
-      source: "Tisza Part kommunikacio",
+      source: "Tisza program 54.o.",
+    },
+  },
+  {
+    topic: "Gyógyszer ÁFA",
+    topicDetail: "Vényköteles gyógyszerek",
+    fidesz: {
+      text: "Jelenlegi 5% ÁFA fenntartása",
+      status: "implemented",
+      source: "ÁFA törvény",
+    },
+    tisza: {
+      text: "0%-ra csökkentés",
+      status: "planned",
+      source: "Tisza program 54.o.",
     },
   },
 ];
@@ -110,7 +126,35 @@ const StatusTag = ({ status }: { status: ProgramRow["fidesz"]["status"] }) => {
 
 export const PromiseComparison = () => {
   return (
-    <div className="overflow-x-auto">
+    <div>
+      {/* Quick links */}
+      <div className="mb-6 flex flex-wrap gap-3">
+        <Link
+          to="/kormany-2022"
+          className="inline-flex items-center gap-2 rounded-lg border bg-card px-4 py-2 text-sm font-medium hover:bg-accent transition-colors"
+        >
+          <span className="h-2 w-2 rounded-full bg-orange-500" />
+          Kormány 2022+ részletek
+          <ArrowRight className="h-4 w-4" />
+        </Link>
+        <Link
+          to="/tisza-2026"
+          className="inline-flex items-center gap-2 rounded-lg border bg-card px-4 py-2 text-sm font-medium hover:bg-accent transition-colors"
+        >
+          <span className="h-2 w-2 rounded-full bg-blue-500" />
+          Tisza 2026 teljes program
+          <ArrowRight className="h-4 w-4" />
+        </Link>
+        <Link
+          to="/tisza-2026/chat"
+          className="inline-flex items-center gap-2 rounded-lg border bg-primary text-primary-foreground px-4 py-2 text-sm font-medium hover:bg-primary/90 transition-colors"
+        >
+          <MessageCircle className="h-4 w-4" />
+          Beszélgess a Tisza programmal
+        </Link>
+      </div>
+
+      <div className="overflow-x-auto">
       <table className="w-full">
         <thead>
           <tr className="border-b border-border">
@@ -158,6 +202,7 @@ export const PromiseComparison = () => {
           ))}
         </tbody>
       </table>
+      </div>
     </div>
   );
 };
